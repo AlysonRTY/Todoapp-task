@@ -20,7 +20,7 @@ Eine moderne Todo-Anwendung. Erstelle, bearbeite und verwalte deine Aufgaben mit
 
 ```bash
 # Repository klonen
-git clone <https://github.com/AlysonRTY/Todoapp-task>
+git clone https://github.com/AlysonRTY/Todoapp-task
 cd todo-app
 
 # Mit Docker Compose starten
