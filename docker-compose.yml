@@ -1,0 +1,50 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: task-app-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=development
+      - PORT=8000
+    volumes:
+      # Mount entire backend directory
+      - ./backend:/app
+      # Override node_modules with named volume for better performance
+      - backend-node-modules:/app/node_modules
+    restart: unless-stopped
+    # Run database setup then dev server
+    command: sh -c "npm run docker:setup && npm run dev"
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: task-app-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    volumes:
+      # Mount entire frontend directory
+      - ./frontend:/app
+      # Override node_modules with named volume for better performance
+      - frontend-node-modules:/app/node_modules
+    restart: unless-stopped
+    command: npm run dev -- --host 0.0.0.0
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  backend-node-modules:
+  frontend-node-modules:
+
+networks:
+  app-network:
+    driver: bridge
