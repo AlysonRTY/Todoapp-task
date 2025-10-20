@@ -7,20 +7,32 @@ async function main() {
 
   const tasks = [
     {
-      title: "Erste Aufgabe",
-      description: "Das ist eine Beispielaufgabe",
+      title: "Git Workflow",
+      description: "Mit Feature-Branches arbeiten statt direkt auf main",
       dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24),
       isDone: false,
     },
     {
-      title: "Zweite Aufgabe",
-      description: "Noch eine Aufgabe zum Testen",
+      title: "Zod Middleware",
+      description: "Zentrale Validierung im Backend für alle Routes",
       dueDate: new Date(Date.now() + 1000 * 60 * 60 * 48),
-      isDone: true,
+      isDone: false,
     },
     {
-      title: "Dritte Aufgabe",
-      description: "Und eine dritte Aufgabe",
+      title: "Component Refactoring",
+      description: "Kleinere, wiederverwendbare React-Komponenten",
+      isDone: false,
+    },
+    {
+      title: "Testing",
+      description: "Unit Tests und End-to-End Tests hinzufügen",
+      dueDate: new Date(Date.now() + 1000 * 60 * 60 * 48),
+      isDone: false,
+    },
+    {
+      title: "React Optimierung",
+      description:
+        "Memoization mit `useMemo` und `useCallback` für bessere Performance",
       isDone: false,
     },
   ];

@@ -89,3 +89,11 @@ Prisma Studio öffnen (optional):
 cd backend
 npm run db:studio
 ```
+
+## Mögliche Verbesserungen
+
+- **Git Workflow**: Mit Feature-Branches arbeiten statt direkt auf main
+- **Zod Middleware**: Zentrale Validierung im Backend für alle Routes
+- **Component Refactoring**: Kleinere, wiederverwendbare React-Komponenten
+- **Testing**: Unit Tests und End-to-End Tests hinzufügen
+- **React Optimierung**: Memoization mit `useMemo` und `useCallback` für bessere Performance

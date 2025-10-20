@@ -8,6 +8,7 @@ import {
   type UpdateTaskInput,
   type TaskParams,
 } from "../schemas/taskSchemas.js";
+import { ZodError } from "zod";
 
 // GET /tasks - Alle Aufgaben abrufen
 export const getAllTasks = async (_req: Request, res: Response) => {
@@ -104,7 +105,7 @@ export const updateTask = async (req: Request, res: Response) => {
     res.status(200).json(task);
   } catch (error) {
     // Zod Validation Fehler behandeln
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       console.error("Zod Validation Error:", error.message);
       console.error("Request body was:", req.body);
       return res.status(400).json({
