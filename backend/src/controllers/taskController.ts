@@ -36,7 +36,7 @@ export const createTask = async (req: Request, res: Response) => {
     const task = await prisma.task.create({
       data: {
         title: validatedData.title, // Bereits getrimmt durch Zod
-        description: validatedData.description ?? null,
+        description: validatedData.description || null,
         dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : null,
       },
     });
@@ -86,11 +86,17 @@ export const updateTask = async (req: Request, res: Response) => {
     const task = await prisma.task.update({
       where: { id: taskId },
       data: {
-        title: validatedData.title,
-        description: validatedData.description ?? existingTask.description,
-        dueDate: validatedData.dueDate
-          ? new Date(validatedData.dueDate)
-          : existingTask.dueDate,
+        title: validatedData.title ?? existingTask.title,
+        description:
+          validatedData.description !== undefined
+            ? validatedData.description || null
+            : existingTask.description,
+        dueDate:
+          validatedData.dueDate !== undefined
+            ? validatedData.dueDate
+              ? new Date(validatedData.dueDate)
+              : null
+            : existingTask.dueDate,
         isDone: validatedData.isDone ?? existingTask.isDone,
       },
     });
@@ -99,6 +105,8 @@ export const updateTask = async (req: Request, res: Response) => {
   } catch (error) {
     // Zod Validation Fehler behandeln
     if (error instanceof Error && error.name === "ZodError") {
+      console.error("Zod Validation Error:", error.message);
+      console.error("Request body was:", req.body);
       return res.status(400).json({
         error: "Eingabedaten ungültig",
         message: "Die Aktualisierungsdaten entsprechen nicht den Anforderungen",

@@ -17,37 +17,45 @@ export const createTaskSchema = z.object({
     .optional(),
 
   // dueDate: Optional, muss ein gültiges Datum sein wenn angegeben
-  // Akzeptiert ISO 8601 Datumsformat (z.B. "2024-12-25" oder "2024-12-25T10:30:00Z")
+  // Akzeptiert verschiedene Datumsformate inkl. datetime-local Format
   dueDate: z
     .string()
-    .regex(
-      /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d{3})?Z?)?$/,
-      "Ungültiges Datumsformat. Verwende YYYY-MM-DD oder ISO 8601 Format (z.B. 2024-12-25)"
-    )
+    .refine((val) => {
+      if (!val || val.trim() === "") return true; // Leere Strings sind erlaubt
+      const dateRegex =
+        /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d{3})?)?Z?)?$/;
+      return dateRegex.test(val) && !isNaN(Date.parse(val));
+    }, "Ungültiges Datumsformat")
+    .transform((val) => (val && val.trim() !== "" ? val : undefined))
     .optional(),
 });
 
 // Schema für das Aktualisieren einer Aufgabe
-// Ähnlich wie createTaskSchema, aber mit zusätzlichem isDone Feld
+// Alle Felder sind optional da nur geänderte Felder gesendet werden
 export const updateTaskSchema = z.object({
   title: z
     .string({ message: "Aufgabentitel ist erforderlich" })
     .min(1, "Der Titel darf nicht leer sein")
     .max(200, "Der Titel darf maximal 200 Zeichen lang sein")
-    .trim(),
+    .trim()
+    .optional(),
 
   description: z
     .string()
     .max(1000, "Die Beschreibung darf maximal 1000 Zeichen lang sein")
     .optional(),
 
-  // Akzeptiert ISO 8601 Datumsformat (z.B. "2024-12-25" oder "2024-12-25T10:30:00Z")
+  // Akzeptiert verschiedene Datumsformate inkl. datetime-local Format
   dueDate: z
     .string()
-    .regex(
-      /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d{3})?Z?)?$/,
-      "Ungültiges Datumsformat. Verwende YYYY-MM-DD oder ISO 8601 Format (z.B. 2024-12-25)"
-    )
+    .refine((val) => {
+      if (!val || val.trim() === "") return true; // wie beim create, leere Strings sind erlaubt
+
+      const dateRegex =
+        /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d{3})?)?Z?)?$/;
+      return dateRegex.test(val) && !isNaN(Date.parse(val));
+    }, "Ungültiges Datumsformat")
+    .transform((val) => (val && val.trim() !== "" ? val : undefined))
     .optional(),
 
   // isDone: Boolean um den Status der Aufgabe zu ändern
