@@ -90,6 +90,10 @@ cd backend
 npm run db:studio
 ```
 
+## API-Dokumentation
+
+https://documenter.getpostman.com/view/42337976/2sB3QQKo84
+
 ## Mögliche Verbesserungen
 
 - **Git Workflow**: Mit Feature-Branches arbeiten statt direkt auf main
